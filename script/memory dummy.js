@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
     const selectors = {
         boardContainer: document.querySelector('.board-container'),
         board: document.querySelector('.board'),
@@ -105,29 +105,40 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const flipCard = card => {
-        console.log('(BEFORE) Amount of cards flipped: ' + state.flippedCards);
-        if (state.flippedCards < 2) return;
-        if (state.isProcessing || card.classList.contains('flipped')) return;
-        console.log(card.id)
-        card.classList.add('flipped');
+        // console.log('(BEFORE) Amount of cards flipped: ' + state.flippedCards);
+        // if (state.flippedCards < 2) return;
+        // if (state.isProcessing || card.classList.contains('flipped')) return;
+        // console.log(card.id)
+        // card.classList.add('flipped');
         state.flippedCards++;
-        console.log('(AFTER) Amount of cards flipped: ' + state.flippedCards);
+        // console.log('(AFTER) Amount of cards flipped: ' + state.flippedCards);
         state.totalFlips++; 
 
         if (!state.gameStarted) {
             startGame();
         }
 
+        
         if (state.flippedCards == 2) {
+            const flippedCards = document.querySelectorAll('.flipped:not(.matched)')
+
+            if (flippedCards[0].innerText === flippedCards[1].innerText) {
+                flippedCards[0].classList.add('matched')
+                flippedCards[1].classList.add('matched')
+            }
+
+            setTimeout(() => {
+                flipBackCards()
+            }, 1000)
            
-            state.isProcessing = false;
+            // state.isProcessing = false;
           
-         setTimeout(() => {
-           
-            state.flippedCards = 0;
-            state.isProcessing = false;
-            checkMatch();
-        }, 0);
+            // setTimeout(() => {
+            
+            //     state.flippedCards = 0;
+            //     state.isProcessing = false;
+            //     checkMatch();
+            // }, 0);
         }
 
         if (!document.querySelectorAll('.card:not(.flipped)').length) {
@@ -151,11 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const attachEventListeners = () => {
         document.addEventListener('click', event => {
            
-            console.log('Clicked');
+            // console.log('Clicked');
             const eventTarget = event.target;
             const eventParent = eventTarget.parentElement;
   
-            if (eventTarget.className.includes('card') && !eventParent.className.includes('flipped') && !state.isProcessing) {
+            if (eventTarget.className.includes('card') && !eventParent.className.includes('flipped') /* && !state.isProcessing*/) {
                 flipCard(eventParent);
                 // eventTarget.removeEventListener('click', attachEventListeners);
             } else if (eventTarget.nodeName === 'BUTTON' && !eventTarget.className.includes('disabled')) {
@@ -169,9 +180,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
 
-    generateGame();
-    attachEventListeners();
-});
+generateGame();
+attachEventListeners();
+// });
 
 
 
